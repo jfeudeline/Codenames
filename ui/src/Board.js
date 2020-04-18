@@ -10,16 +10,21 @@ const Board = () => {
   const [loading, setLoading] = useState(true);
   const [newDeal, setNewDeal] = useState(false);
   const { gameId } = useParams();
-  //const apiUrl = `http://localhost:5000/api/${gameId}`;
-  const apiUrl = `https://lit-stream-81562.herokuapp.com/api/${gameId}`;
+  const apiUrl = `http://localhost:5000/api/${gameId}`;
+  //const apiUrl = `https://lit-stream-81562.herokuapp.com/api/${gameId}`;
   const newDealUrl = `http://localhost:5000/api/${gameId}/new-deal`;
-  const newDealUrl = `https://lit-stream-81562.herokuapp.com/api/${gameId}/new-deal`;
+  //const newDealUrl = `https://lit-stream-81562.herokuapp.com/api/${gameId}/new-deal`;
 
-  useEffect(() => {
+  const getCards = () => {
     get(apiUrl).then((cards) => {
       setLoading(false);
       setCards(cards);
     });
+  }
+
+  useEffect(() => {
+    getCards();
+    setInterval(getCards, 6 * 1000); // appel la fonction toutes les 2 sec
   }, [apiUrl]);
 
   useEffect(() => {
@@ -35,6 +40,11 @@ const Board = () => {
     }
   }, [newDeal]);
 
+  /*
+   * Récupère l'état des cartes de la partie
+   */
+  
+
   const changeSpymaster = (e) => {
     e.preventDefault();
     setIsSpymaster(!isSpymaster);
@@ -42,6 +52,7 @@ const Board = () => {
 
   const changeCards = (e) => {
     e.preventDefault();
+    setIsSpymaster(false)
     setNewDeal(true);
   };
 
